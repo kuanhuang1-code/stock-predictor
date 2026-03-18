@@ -1,0 +1,12 @@
+Best Model: Baseline (Mean)
+Direction Accuracy: 54.5%
+Test Period Return: 3.92%
+
+Predictions:
+Day 1: $20.74 (+1.93%)
+Day 2: $21.14 (+1.93%)
+Day 3: $21.55 (+1.93%)
+Day 4: $21.97 (+1.93%)
+Day 5: $22.39 (+1.93%)
+Day 6: $22.82 (+1.93%)
+Day 7: $23.26 (+1.93%)

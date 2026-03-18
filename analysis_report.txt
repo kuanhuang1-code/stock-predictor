@@ -1,0 +1,43 @@
+
+CHYM Advanced Analysis Report
+Generated: 2026-03-18 02:49 UTC
+
+POSITION
+--------
+Shares: 26,000
+Current Price: $20.35
+Current Value: $529,100
+
+SENTIMENT
+---------
+News Sentiment: -1.43
+Social Sentiment: -2.72
+Combined: -2.07
+
+BEST MODEL
+----------
+Stacking Ensemble
+Direction Accuracy: 42.9%
+
+BACKTEST (2026-02-13 to 2026-03-16)
+----------
+Strategy Return: +3.35%
+Buy & Hold Return: +3.35%
+Outperformance: +0.00%
+
+7-DAY FORECAST
+--------------
+Day 1: $20.93 (+2.84%) → $544,111
+Day 2: $21.46 (+2.55%) → $558,004
+Day 3: $21.95 (+2.30%) → $570,827
+Day 4: $22.41 (+2.07%) → $582,633
+Day 5: $22.83 (+1.86%) → $593,478
+Day 6: $23.21 (+1.68%) → $603,420
+Day 7: $23.56 (+1.51%) → $612,518
+
+RECOMMENDATION
+--------------
+Best Sell Day: Day 7 @ $23.56
+Potential Profit: $+83,418
+
+⚠️ DISCLAIMER: This is for educational purposes only. Not financial advice.

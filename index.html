@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHYM Stock Predictor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: #888; margin-bottom: 30px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { 
+            background: rgba(255,255,255,0.1); 
+            padding: 20px; 
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-label { color: #888; font-size: 0.9em; }
+        .stat-value { font-size: 1.8em; font-weight: bold; margin-top: 5px; }
+        .chart-container { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { background: rgba(255,255,255,0.1); }
+        .positive { color: #00c853; }
+        .negative { color: #ff5252; }
+        .recommendation { 
+            background: rgba(255,255,255,0.1); 
+            padding: 25px; 
+            border-radius: 12px;
+            font-size: 1.3em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .footer { text-align: center; color: #666; margin-top: 40px; font-size: 0.9em; }
+        .update-time { color: #888; font-size: 0.85em; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 CHYM Stock Predictor</h1>
+        <p class="subtitle">LSTM + Attention Model | Your Position: 26,000 shares</p>
+        <p class="update-time">Last updated: 2026-03-18 00:52 UTC</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Current Price</div>
+                <div class="stat-value">$19.65</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Position Value</div>
+                <div class="stat-value">$510,900</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Best Predicted</div>
+                <div class="stat-value">$20.33</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Potential P/L</div>
+                <div class="stat-value positive">$+17,726</div>
+            </div>
+        </div>
+        
+        <div class="recommendation positive">
+            🎯 Best Sell Day: Day 7 @ $20.33 → Profit: $+17,726
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="priceChart"></canvas>
+        </div>
+        
+        <h2 style="margin-bottom: 15px;">📅 7-Day Forecast</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Predicted Price</th>
+                    <th>Change</th>
+                    <th>Position Value</th>
+                    <th>P/L</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td>Day 1</td>
+            <td>$19.74</td>
+            <td class="positive">+0.43%</td>
+            <td>$513,121</td>
+            <td class="positive">$+2,221</td>
+        </tr>
+        <tr>
+            <td>Day 2</td>
+            <td>$19.83</td>
+            <td class="positive">+0.47%</td>
+            <td>$515,510</td>
+            <td class="positive">$+4,610</td>
+        </tr>
+        <tr>
+            <td>Day 3</td>
+            <td>$19.92</td>
+            <td class="positive">+0.49%</td>
+            <td>$518,026</td>
+            <td class="positive">$+7,126</td>
+        </tr>
+        <tr>
+            <td>Day 4</td>
+            <td>$20.02</td>
+            <td class="positive">+0.50%</td>
+            <td>$520,630</td>
+            <td class="positive">$+9,730</td>
+        </tr>
+        <tr>
+            <td>Day 5</td>
+            <td>$20.13</td>
+            <td class="positive">+0.51%</td>
+            <td>$523,300</td>
+            <td class="positive">$+12,400</td>
+        </tr>
+        <tr>
+            <td>Day 6</td>
+            <td>$20.23</td>
+            <td class="positive">+0.51%</td>
+            <td>$525,978</td>
+            <td class="positive">$+15,078</td>
+        </tr>
+        <tr>
+            <td>Day 7</td>
+            <td>$20.33</td>
+            <td class="positive">+0.50%</td>
+            <td>$528,626</td>
+            <td class="positive">$+17,726</td>
+        </tr>
+            </tbody>
+        </table>
+        
+        <div class="footer">
+            <p>Built with PyTorch | Data from Yahoo Finance</p>
+            <p style="margin-top: 10px;">⚠️ This is for learning ML, not financial advice. Stock markets are unpredictable.</p>
+        </div>
+    </div>
+    
+    <script>
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-21", "2026-03-22", "2026-03-23", "2026-03-24"],
+                datasets: [{
+                    label: 'Historical Price',
+                    data: [21.860000610351562, 21.729999542236328, 20.770000457763672, 21.780000686645508, 22.399999618530273, 22.719999313354492, 20.639999389648438, 19.34000015258789, 19.690000534057617, 19.649999618530273, 20.59000015258789, 20.6200008392334, 20.90999984741211, 19.360000610351562, 20.43000030517578, 21.110000610351562, 23.969999313354492, 22.1299991607666, 22.6200008392334, 22.780000686645508, 22.520000457763672, 23.110000610351562, 22.229999542236328, 22.6299991607666, 22.309999465942383, 22.920000076293945, 21.6200008392334, 20.610000610351562, 20.350000381469727, 19.649999618530273, null, null, null, null, null, null, null],
+                    borderColor: '#4fc3f7',
+                    backgroundColor: 'rgba(79, 195, 247, 0.1)',
+                    fill: true,
+                    tension: 0.1
+                }, {
+                    label: 'Predicted Price',
+                    data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 19.649999618530273, 19.735413999687466, 19.827323152031774, 19.924058254523533, 20.024233786535532, 20.12691559435194, 20.22993109688071, 20.331750476610768],
+                    borderColor: '#ff7043',
+                    borderDash: [5, 5],
+                    pointBackgroundColor: '#ff7043',
+                    pointRadius: 6,
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#eee' } }
+                },
+                scales: {
+                    x: { 
+                        ticks: { color: '#888' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    y: { 
+                        ticks: { color: '#888', callback: v => '$' + v.toFixed(2) },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

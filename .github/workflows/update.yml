@@ -1,0 +1,39 @@
+name: Update Dashboard
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # Daily at 2pm UTC (6am PST, after market opens)
+  workflow_dispatch:  # Manual trigger
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install yfinance torch numpy pandas scikit-learn
+      
+      - name: Generate dashboard
+        run: python generate_dashboard.py
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          keep_files: false

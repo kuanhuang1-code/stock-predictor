@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHYM Stock Predictor</title>
+    <title>CHYM 12-Month Stock Forecast</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #eee;
             min-height: 100vh;
             padding: 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; }
         h1 { font-size: 2.5em; margin-bottom: 10px; }
-        .subtitle { color: #888; margin-bottom: 30px; }
+        h2 { margin-bottom: 15px; }
+        .subtitle { color: #888; margin-bottom: 5px; }
+        .model-info { color: #666; font-size: 0.8em; margin-bottom: 25px; font-style: italic; }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { 
-            background: rgba(255,255,255,0.1); 
-            padding: 20px; 
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
             border-radius: 12px;
             backdrop-filter: blur(10px);
         }
@@ -28,161 +30,311 @@
         .stat-value { font-size: 1.8em; font-weight: bold; margin-top: 5px; }
         .chart-container { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
         th { background: rgba(255,255,255,0.1); }
         .positive { color: #00c853; }
         .negative { color: #ff5252; }
-        .recommendation { 
-            background: rgba(255,255,255,0.1); 
-            padding: 25px; 
+        .recommendation {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
             border-radius: 12px;
             font-size: 1.3em;
             text-align: center;
             margin-bottom: 30px;
         }
+        .signal-legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .signal-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        .signal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
         .footer { text-align: center; color: #666; margin-top: 40px; font-size: 0.9em; }
         .update-time { color: #888; font-size: 0.85em; margin-top: 5px; }
+        .table-scroll { overflow-x: auto; }
+        .factors { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 30px; }
+        .factors h3 { margin-bottom: 10px; color: #aaa; }
+        .factor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+        .factor-item { display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; }
+        .factor-name { color: #888; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📈 CHYM Stock Predictor</h1>
+        <h1>CHYM 12-Month Stock Forecast</h1>
         <p class="subtitle">LSTM + Attention Model | Your Position: 26,000 shares</p>
-        <p class="update-time">Last updated: 2026-03-23 15:02 UTC</p>
-        
+        <p class="model-info">Trained 27 epochs | 38 features | Val direction accuracy: 41.2%</p>
+        <p class="update-time">Last updated: 2026-03-23 16:46 UTC</p>
+
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-label">Current Price</div>
-                <div class="stat-value">$19.62</div>
+                <div class="stat-value">$19.64</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Position Value</div>
-                <div class="stat-value">$510,120</div>
+                <div class="stat-value">$510,640</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Best Predicted</div>
-                <div class="stat-value">$19.97</div>
+                <div class="stat-label">12-Month Target</div>
+                <div class="stat-value negative">$2.00</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Potential P/L</div>
-                <div class="stat-value positive">$+9,123</div>
+                <div class="stat-label">Peak Predicted</div>
+                <div class="stat-value">$16.29</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">12-Month Change</div>
+                <div class="stat-value negative">-89.8%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Max Potential P/L</div>
+                <div class="stat-value negative">$-87,190</div>
             </div>
         </div>
-        
-        <div class="recommendation positive">
-            🎯 Best Sell Day: Day 7 @ $19.97 → Profit: $+9,123
+
+        <div class="recommendation negative">
+            Consider selling soon — model predicts -89.8% decline over 12 months
         </div>
-        
+
         <div class="chart-container">
             <canvas id="priceChart"></canvas>
         </div>
-        
-        <h2 style="margin-bottom: 15px;">📅 7-Day Forecast</h2>
+
+        <div class="signal-legend">
+            <div class="signal-legend-item">
+                <div class="signal-dot" style="background:#00c853;"></div>
+                HOLD — Keep your position
+            </div>
+            <div class="signal-legend-item">
+                <div class="signal-dot" style="background:#ff9800;"></div>
+                SELL (profit) — Take profits
+            </div>
+            <div class="signal-legend-item">
+                <div class="signal-dot" style="background:#ff5252;"></div>
+                SELL (loss) — Cut losses
+            </div>
+        </div>
+
+        <h2>Monthly Forecast</h2>
+        <div class="table-scroll">
         <table>
             <thead>
                 <tr>
-                    <th>Day</th>
-                    <th>Predicted Price</th>
-                    <th>Change</th>
-                    <th>Position Value</th>
+                    <th>Month</th>
+                    <th>Price</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>vs Today</th>
                     <th>P/L</th>
+                    <th>Signal</th>
+                    <th>Reasoning</th>
                 </tr>
             </thead>
             <tbody>
                 
         <tr>
-            <td>Day 1</td>
-            <td>$19.65</td>
-            <td class="positive">+0.14%</td>
-            <td>$510,824</td>
-            <td class="positive">$+704</td>
+            <td>Apr 2026</td>
+            <td>$16.29</td>
+            <td>$19.46</td>
+            <td>$16.29</td>
+            <td class="negative">-17.1%</td>
+            <td class="negative">$-87,190</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-17.1%), losing momentum</td>
         </tr>
         <tr>
-            <td>Day 2</td>
-            <td>$19.68</td>
-            <td class="positive">+0.18%</td>
-            <td>$511,733</td>
-            <td class="positive">$+1,613</td>
+            <td>May 2026</td>
+            <td>$13.42</td>
+            <td>$16.14</td>
+            <td>$13.42</td>
+            <td class="negative">-31.7%</td>
+            <td class="negative">$-161,771</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-31.7%), losing momentum</td>
         </tr>
         <tr>
-            <td>Day 3</td>
-            <td>$19.73</td>
-            <td class="positive">+0.26%</td>
-            <td>$513,047</td>
-            <td class="positive">$+2,926</td>
+            <td>Jun 2026</td>
+            <td>$11.09</td>
+            <td>$13.29</td>
+            <td>$11.09</td>
+            <td class="negative">-43.6%</td>
+            <td class="negative">$-222,401</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-43.6%), losing momentum</td>
         </tr>
         <tr>
-            <td>Day 4</td>
-            <td>$19.79</td>
-            <td class="positive">+0.29%</td>
-            <td>$514,512</td>
-            <td class="positive">$+4,392</td>
+            <td>Jul 2026</td>
+            <td>$9.20</td>
+            <td>$10.99</td>
+            <td>$9.20</td>
+            <td class="negative">-53.2%</td>
+            <td class="negative">$-271,476</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-53.2%), losing momentum</td>
         </tr>
         <tr>
-            <td>Day 5</td>
-            <td>$19.85</td>
-            <td class="positive">+0.29%</td>
-            <td>$516,028</td>
-            <td class="positive">$+5,908</td>
+            <td>Aug 2026</td>
+            <td>$7.57</td>
+            <td>$9.12</td>
+            <td>$7.57</td>
+            <td class="negative">-61.4%</td>
+            <td class="negative">$-313,703</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-61.4%), losing momentum</td>
         </tr>
         <tr>
-            <td>Day 6</td>
-            <td>$19.90</td>
-            <td class="positive">+0.28%</td>
-            <td>$517,464</td>
-            <td class="positive">$+7,344</td>
+            <td>Sep 2026</td>
+            <td>$6.26</td>
+            <td>$7.51</td>
+            <td>$6.26</td>
+            <td class="negative">-68.1%</td>
+            <td class="negative">$-347,826</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-68.1%), losing momentum</td>
         </tr>
         <tr>
-            <td>Day 7</td>
-            <td>$19.97</td>
-            <td class="positive">+0.34%</td>
-            <td>$519,243</td>
-            <td class="positive">$+9,123</td>
+            <td>Oct 2026</td>
+            <td>$5.19</td>
+            <td>$6.21</td>
+            <td>$5.19</td>
+            <td class="negative">-73.6%</td>
+            <td class="negative">$-375,594</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-73.6%), losing momentum</td>
+        </tr>
+        <tr>
+            <td>Nov 2026</td>
+            <td>$4.28</td>
+            <td>$5.15</td>
+            <td>$4.28</td>
+            <td class="negative">-78.2%</td>
+            <td class="negative">$-399,416</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-78.2%), losing momentum</td>
+        </tr>
+        <tr>
+            <td>Dec 2026</td>
+            <td>$3.54</td>
+            <td>$4.24</td>
+            <td>$3.54</td>
+            <td class="negative">-82.0%</td>
+            <td class="negative">$-418,650</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-82.0%), losing momentum</td>
+        </tr>
+        <tr>
+            <td>Jan 2027</td>
+            <td>$2.93</td>
+            <td>$3.51</td>
+            <td>$2.93</td>
+            <td class="negative">-85.1%</td>
+            <td class="negative">$-434,420</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-85.1%), losing momentum</td>
+        </tr>
+        <tr>
+            <td>Feb 2027</td>
+            <td>$2.42</td>
+            <td>$2.90</td>
+            <td>$2.42</td>
+            <td class="negative">-87.7%</td>
+            <td class="negative">$-447,814</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-87.7%), losing momentum</td>
+        </tr>
+        <tr>
+            <td>Mar 2027</td>
+            <td>$2.00</td>
+            <td>$2.39</td>
+            <td>$2.00</td>
+            <td class="negative">-89.8%</td>
+            <td class="negative">$-458,653</td>
+            <td><span style="background:rgba(255,82,82,0.2); color:#ff5252; padding:4px 12px; border-radius:20px; font-weight:bold;">SELL</span></td>
+            <td style="color:#888; font-size:0.85em;">Cut losses — significant drop (-89.8%), losing momentum</td>
         </tr>
             </tbody>
         </table>
-        
+        </div>
+
         <div class="footer">
-            <p>Built with PyTorch | Data from Yahoo Finance</p>
-            <p style="margin-top: 10px;">⚠️ This is for learning ML, not financial advice. Stock markets are unpredictable.</p>
+            <p>Built with PyTorch LSTM + Attention | Market data: SPY, VIX, XLF, QQQ, TLT, HYG | Data from Yahoo Finance</p>
+            <p style="margin-top: 10px;">This is for learning ML, not financial advice. Stock markets are unpredictable. Past performance does not guarantee future results.</p>
         </div>
     </div>
-    
+
     <script>
         const ctx = document.getElementById('priceChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-28", "2026-03-29", "2026-03-30"],
+                labels: ["2025-09-30", "2025-10-29", "2025-11-28", "2025-12-30", "2026-01-30", "2026-03-03", "2026-03-23", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Dec 2026", "Jan 2027", "Feb 2027", "Mar 2027"],
                 datasets: [{
                     label: 'Historical Price',
-                    data: [22.399999618530273, 22.719999313354492, 20.639999389648438, 19.34000015258789, 19.690000534057617, 19.649999618530273, 20.59000015258789, 20.6200008392334, 20.90999984741211, 19.360000610351562, 20.43000030517578, 21.110000610351562, 23.969999313354492, 22.1299991607666, 22.6200008392334, 22.780000686645508, 22.520000457763672, 23.110000610351562, 22.229999542236328, 22.6299991607666, 22.309999465942383, 22.920000076293945, 21.6200008392334, 20.610000610351562, 20.350000381469727, 19.649999618530273, 18.829999923706055, 19.25, 19.149999618530273, 19.6200008392334, null, null, null, null, null, null, null],
+                    data: [20.170000076293945, 17.860000610351562, 21.1299991607666, 26.329999923706055, 25.420000076293945, 22.780000686645508, 19.639999389648438, null, null, null, null, null, null, null, null, null, null, null, null],
                     borderColor: '#4fc3f7',
                     backgroundColor: 'rgba(79, 195, 247, 0.1)',
                     fill: true,
-                    tension: 0.1
+                    tension: 0.3,
+                    pointRadius: 4
                 }, {
                     label: 'Predicted Price',
-                    data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 19.6200008392334, 19.647083827670556, 19.682045967485845, 19.732557841630765, 19.788913059269643, 19.84724268615466, 19.902446444494906, 19.970895181473452],
+                    data: [null, null, null, null, null, null, 19.639999389648438, 16.286541306480046, 13.418041493873545, 11.08610962337088, 9.198601273987034, 7.574483502477325, 6.262064710090841, 5.19407244122066, 4.27783193079707, 3.5380673752689735, 2.9315500713194287, 2.4163675371864786, 1.9995087303745949],
                     borderColor: '#ff7043',
                     borderDash: [5, 5],
                     pointBackgroundColor: '#ff7043',
-                    pointRadius: 6,
+                    pointRadius: 5,
                     fill: false,
-                    tension: 0.1
+                    tension: 0.3
+                }, {
+                    label: 'Predicted High',
+                    data: [null, null, null, null, null, null, 19.639999389648438, 19.458310955448724, 16.14089175550039, 13.294590823193815, 10.986638725420546, 9.115849607045835, 7.5062251445990515, 6.2064908143619375, 5.146699082649056, 4.239672845556981, 3.5070281244384036, 2.904289033576226, 2.394807744087072],
+                    borderColor: 'rgba(0, 200, 83, 0.3)',
+                    backgroundColor: 'rgba(0, 200, 83, 0.05)',
+                    borderDash: [2, 2],
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0.3
+                }, {
+                    label: 'Predicted Low',
+                    data: [null, null, null, null, null, null, 19.639999389648438, 16.286541306480046, 13.418041493873545, 11.08610962337088, 9.198601273987034, 7.574483502477325, 6.262064710090841, 5.19407244122066, 4.27783193079707, 3.5380673752689735, 2.9315500713194287, 2.4163675371864786, 1.9995087303745949],
+                    borderColor: 'rgba(255, 82, 82, 0.3)',
+                    backgroundColor: 'rgba(255, 82, 82, 0.05)',
+                    borderDash: [2, 2],
+                    pointRadius: 0,
+                    fill: '-1',
+                    tension: 0.3
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { labels: { color: '#eee' } }
+                    legend: { labels: { color: '#eee' } },
+                    title: {
+                        display: true,
+                        text: 'CHYM Price: Historical + 12-Month Forecast',
+                        color: '#eee',
+                        font: { size: 16 }
+                    }
                 },
                 scales: {
-                    x: { 
-                        ticks: { color: '#888' },
+                    x: {
+                        ticks: { color: '#888', maxRotation: 45 },
                         grid: { color: 'rgba(255,255,255,0.1)' }
                     },
-                    y: { 
+                    y: {
                         ticks: { color: '#888', callback: v => '$' + v.toFixed(2) },
                         grid: { color: 'rgba(255,255,255,0.1)' }
                     }

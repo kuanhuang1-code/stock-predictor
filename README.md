@@ -1,5 +1,7 @@
 # 📈 Chime Stock Predictor
 
+**Live Dashboard:** [https://kuanhuang1-code.github.io/stock-predictor/](https://kuanhuang1-code.github.io/stock-predictor/)
+
 LSTM + Attention model for predicting stock prices using PyTorch Lightning.
 
 **Your Position:** 26,000 shares

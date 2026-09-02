@@ -48,29 +48,29 @@
     <div class="container">
         <h1>📈 CHYM Stock Predictor</h1>
         <p class="subtitle">LSTM + Attention Model | Your Position: 26,000 shares</p>
-        <p class="update-time">Last updated: 2026-09-01 17:44 UTC</p>
+        <p class="update-time">Last updated: 2026-09-02 17:46 UTC</p>
         
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-label">Current Price</div>
-                <div class="stat-value">$31.80</div>
+                <div class="stat-value">$32.85</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Position Value</div>
-                <div class="stat-value">$826,670</div>
+                <div class="stat-value">$853,970</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Best Predicted</div>
-                <div class="stat-value">$31.86</div>
+                <div class="stat-value">$32.79</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Potential P/L</div>
-                <div class="stat-value positive">$+1,797</div>
+                <div class="stat-value negative">$-1,521</div>
             </div>
         </div>
         
-        <div class="recommendation positive">
-            🎯 Best Sell Day: Day 4 @ $31.86 → Profit: $+1,797
+        <div class="recommendation negative">
+            ⚠️ Model predicts decline - consider holding or selling soon
         </div>
         
         <div class="chart-container">
@@ -92,52 +92,52 @@
                 
         <tr>
             <td>Day 1</td>
-            <td>$31.70</td>
-            <td class="negative">-0.30%</td>
-            <td>$824,231</td>
-            <td class="negative">$-2,439</td>
+            <td>$32.79</td>
+            <td class="negative">-0.18%</td>
+            <td>$852,449</td>
+            <td class="negative">$-1,521</td>
         </tr>
         <tr>
             <td>Day 2</td>
-            <td>$31.71</td>
-            <td class="positive">+0.02%</td>
-            <td>$824,364</td>
-            <td class="positive">$-2,306</td>
+            <td>$32.74</td>
+            <td class="negative">-0.15%</td>
+            <td>$851,156</td>
+            <td class="negative">$-2,815</td>
         </tr>
         <tr>
             <td>Day 3</td>
-            <td>$31.77</td>
-            <td class="positive">+0.19%</td>
-            <td>$825,930</td>
-            <td class="positive">$-740</td>
+            <td>$32.69</td>
+            <td class="negative">-0.15%</td>
+            <td>$849,883</td>
+            <td class="negative">$-4,087</td>
         </tr>
         <tr>
             <td>Day 4</td>
-            <td>$31.86</td>
-            <td class="positive">+0.31%</td>
-            <td>$828,467</td>
-            <td class="positive">$+1,797</td>
+            <td>$32.58</td>
+            <td class="negative">-0.34%</td>
+            <td>$846,994</td>
+            <td class="negative">$-6,976</td>
         </tr>
         <tr>
             <td>Day 5</td>
-            <td>$31.86</td>
-            <td class="negative">-0.03%</td>
-            <td>$828,246</td>
-            <td class="negative">$+1,576</td>
+            <td>$32.40</td>
+            <td class="negative">-0.53%</td>
+            <td>$842,468</td>
+            <td class="negative">$-11,502</td>
         </tr>
         <tr>
             <td>Day 6</td>
-            <td>$31.44</td>
-            <td class="negative">-1.31%</td>
-            <td>$817,359</td>
-            <td class="negative">$-9,311</td>
+            <td>$32.24</td>
+            <td class="negative">-0.50%</td>
+            <td>$838,226</td>
+            <td class="negative">$-15,744</td>
         </tr>
         <tr>
             <td>Day 7</td>
-            <td>$31.12</td>
-            <td class="negative">-0.99%</td>
-            <td>$809,240</td>
-            <td class="negative">$-17,430</td>
+            <td>$32.07</td>
+            <td class="negative">-0.53%</td>
+            <td>$833,749</td>
+            <td class="negative">$-20,221</td>
         </tr>
             </tbody>
         </table>
@@ -153,17 +153,17 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["2026-07-21", "2026-07-22", "2026-07-23", "2026-07-24", "2026-07-27", "2026-07-28", "2026-07-29", "2026-07-30", "2026-07-31", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-17", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-21", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08"],
+                labels: ["2026-07-22", "2026-07-23", "2026-07-24", "2026-07-27", "2026-07-28", "2026-07-29", "2026-07-30", "2026-07-31", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-17", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-21", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08", "2026-09-09"],
                 datasets: [{
                     label: 'Historical Price',
-                    data: [22.329999923706055, 21.81999969482422, 20.760000228881836, 20.690000534057617, 21.860000610351562, 22.3700008392334, 22.420000076293945, 22.600000381469727, 22.989999771118164, 24.260000228881836, 24.950000762939453, 25.920000076293945, 31.25, 29.100000381469727, 30.850000381469727, 31.729999542236328, 31.600000381469727, 32.18000030517578, 32.02000045776367, 31.450000762939453, 31.90999984741211, 33.06999969482422, 31.950000762939453, 32.779998779296875, 32.70000076293945, 33.099998474121094, 33.150001525878906, 33.36000061035156, 33.11000061035156, 31.795000076293945, null, null, null, null, null, null, null],
+                    data: [21.81999969482422, 20.760000228881836, 20.690000534057617, 21.860000610351562, 22.3700008392334, 22.420000076293945, 22.600000381469727, 22.989999771118164, 24.260000228881836, 24.950000762939453, 25.920000076293945, 31.25, 29.100000381469727, 30.850000381469727, 31.729999542236328, 31.600000381469727, 32.18000030517578, 32.02000045776367, 31.450000762939453, 31.90999984741211, 33.06999969482422, 31.950000762939453, 32.779998779296875, 32.70000076293945, 33.099998474121094, 33.150001525878906, 33.36000061035156, 33.11000061035156, 31.65999984741211, 32.845001220703125, null, null, null, null, null, null, null],
                     borderColor: '#4fc3f7',
                     backgroundColor: 'rgba(79, 195, 247, 0.1)',
                     fill: true,
                     tension: 0.1
                 }, {
                     label: 'Predicted Price',
-                    data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 31.795000076293945, 31.701198559727818, 31.706304270383015, 31.76655636312548, 31.86410846545424, 31.855607783638437, 31.43689686009268, 31.124602881260547],
+                    data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 32.845001220703125, 32.78649758024173, 32.73675076394023, 32.687802157576044, 32.576693135536104, 32.40260435862717, 32.23946047718018, 32.06725486886854],
                     borderColor: '#ff7043',
                     borderDash: [5, 5],
                     pointBackgroundColor: '#ff7043',
